@@ -5,7 +5,7 @@ class Scene(object):
 
     def enter(self):
         print "This scene is not yet configured.  Subclass it and implement enter()."
-      exit(1)
+        exit(1)
 
 class Engine(object):
 
@@ -15,10 +15,12 @@ class Engine(object):
     def play(self):
         current_scene = self.scene_map.opening_scene()
 
-    while True:
-        print "\n--------"
-        next_scene_name = current_scene.enter()
-        current_scene = self.scene_map.next_scene(next_scene_name)
+        while current_scene != None:
+            print "\n--------"
+            next_scene_name = current_scene.enter()
+            current_scene = self.scene_map.next_scene(next_scene_name)
+        
+        exit(1)
 
 class Death(Scene):
 
@@ -66,7 +68,7 @@ class CentralCorridor(Scene):
             print "your head and eats you."
             return 'death'
 
-        else actions == "tell a joke":
+        elif action == "tell a joke":
             print "Lucky for you they made you learn Gothon insults in the academy."
             print "You tell the one Gothon joke you know:"
             print "Why did the chicken cross the road? To get to the other slide."
@@ -89,17 +91,17 @@ class LaserWeaponArmory(Scene):
         print "neutron bomb in its container. There's a keypad lock on the box."
         print "and you need the code to get the bomb out.  If you get the code"
         print "wrong 10 times then the lock closes forever and you can't"
-        print "get the bomb.  The coe is 3 digits."
-        code = "%d%d%d" % (randint(1,9), randint(1,9), randint(1,9))
+        print "get the bomb.  The code is 3 digits."
+        code = "%d%d%d" % (randint(1,2), randint(1,2), randint(1,2))
         guess = raw_input("[keypad]> ")
         guesses = 0
 
-        while guess != code and guesses < 10:
+        while guess != code and guess != "007" and guesses < 9:
             print "BZZZZEDDD!"
             guesses += 1
             guess = raw_input("[keypad]> ")
 
-        if guess == code:
+        if guess == code or guess == "007":
             print "The container clicks open and the seal breaks, letting gas out."
             print "You grab the neutron bomb and run as fast as you can to the"
             print "bridge where you must place it in the right spot."
@@ -141,7 +143,7 @@ class TheBridge(Scene):
             print "and blast the lock so the Gothons can't get out."
             print  "Now that the bomb is placed you run to the escape pod to"
             print "get off this tin can."
-            return 'escape_pod'
+            return 'fight'
         else:
             print "DOES NOT COMPUTE!"
             return "the_bridge"
@@ -157,12 +159,12 @@ class EscapePod(Scene):
         print "but you don't have time to look. There's 5 pods, which one"
         print "do you take?"
 
-        good_pod = randint(1,5)
+        good_pod = randint(1,2)
         guess = raw_input("[pod #]> ")
 
         if int(guess) != good_pod:
             print "You jump into pod %s and hit the eject button." % guess
-            print "The pod escaped out into the boid of space, then"
+            print "The pod escaped out into the void of space, then"
             print "implodes as the hull ruptures, crushing your body"
             print "into bone jelly"
             return 'death'
@@ -176,27 +178,98 @@ class EscapePod(Scene):
 
             return 'finished'
 
+class Fight(Scene):
+
+    def enter(self):
+        print "You enter the hall leading to the escape pods.  You begin to sprint, "
+        print "trying to get to the escape pods as fast as possible.  As you turn a "
+        print "corner, you are tripped by a Gothon!  You fall to the ground, and "
+        print "roll over, only to see the Gothon charging at you!  You quickly get "
+        print "up, but it looks like you aren't going to be able to get past this "
+        print "Gothon without a fight!"
+
+        health = 100
+        gHealth = 100
+        damage = 0
+        gDamage = 0
+        
+        while health > 0 and gHealth > 0:
+            print "Your health: %d\t Gothon's health: %d\n" % (health, gHealth)
+            move = raw_input('What do you do?!? ')
+            if move == "punch":
+                success = randint(0, 9)
+                if success < 5:
+                    gDamage = 0
+                    print "You missed!"
+                else:
+                    gDamage = randint(10, 20)
+                    print "Hit!"
+            elif move == "kick":
+                success = randint(0, 19)
+                if success < 15:
+                    gDamage = 0
+                    print "You missed!"
+                else:
+                    gDamage = randint(40, 50)
+                    print "Hit!"
+            else:
+                print "What the heck are you trying to do?"
+
+            print "You did %d damage!\n" % gDamage
+
+            success = randint(0, 20)
+            if (success < 10):
+                damage = 0
+                print "The Gothon tries to hit you, but you dodge"
+            elif (success < 15):
+                damage = randint(10, 20)
+                print "The Gothon punched you in the face!"
+            elif (success < 19):
+                damage = randint(30, 35)
+                print "The Gothon kicked you in the spleen!"
+            else:
+                damage = 70
+                print "The Gothon punches you through the chest and rips out your heart!"
+
+            print "It did %d damage!\n" % damage
+
+            gHealth -= gDamage
+            health -= damage
+
+        if gHealth < 0:
+            gHealth = 0
+        if health < 0:
+            health = 0
+
+        print "Your health: %d\t Gothon's health: %d" % (health, gHealth)
+
+        if health > 0:
+            print "You beat the Gothon!"
+            return 'escape_pod'
+        else:
+            print "You died!"
+            return 'death'
+
 class Map(object):
+
+    places = {
+            'central_corridor': CentralCorridor(), 
+            'laser_weapon_armory': LaserWeaponArmory(), 
+            'the_bridge': TheBridge(),
+            'escape_pod': EscapePod(),
+            'fight': Fight(),
+            'death': Death()
+            }
 
     def __init__(self, start_scene):
         self.start_scene = start_scene
 
-    # takes in a string, return a class?
+    # takes in a string, return an object
     def next_scene(self, scene_name):
-        if scene_name == ''
+        return Map.places.get(scene_name)
 
     def opening_scene(self):
-        if start_scene == 'central_corridor':
-            CentralCorridor.enter()
-        elif start_scene == 'laser_weapon_armory':
-            LaserWeaponArmory.enter()
-        elif start_scene == 'the_bridge':
-            TheBridge.enter()
-        else:
-            EscapePod.enter()
-
-
-       
+        return self.next_scene(self.start_scene)
 
 a_map = Map('central_corridor')
 a_game = Engine(a_map)
