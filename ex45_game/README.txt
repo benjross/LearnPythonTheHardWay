@@ -23,7 +23,7 @@ Scenes:
     - punch
     - kick
     - special_move
-* Character
+* Player
     - attack
     * Bob
     * Jill
@@ -31,6 +31,7 @@ Scenes:
     * Dave
 * Engine
     - play
-    - generate_attack
+    - select_player
+    - generate_ai
 * Map
     - draw    
