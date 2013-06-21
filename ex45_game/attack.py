@@ -1,10 +1,12 @@
+from random import random
 class Attack(object):
 
-    def punch(self, prob, damage):
-        pass
-
-    def kick(self, prob, damage):
-        pass
-
-    def special(self, prob, damage):
-        pass
+    def __init__(self, prob, damage):
+        self.prob = prob
+	self.damage = damage
+    
+    def attack(self):
+	if random() < prob:
+	    return damage
+	else:
+	    return 0

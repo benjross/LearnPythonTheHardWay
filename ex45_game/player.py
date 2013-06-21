@@ -1,17 +1,19 @@
-import attack
+from attack import Attack
 	
 class Player(object):
-    def __init__(self, attack):
-        self.attack = attack
-
     attacks = {
-              'punch': self.attack.punch(0, 0),
-              'kick': self.attack.kick(0, 0)
+              'punch': Attack(0, 0),
+              'kick': Attack(0, 0)
               }
     def attack(self, move):
-        Player.attacks.get(move)
+        Player.attacks.get(move).attack()
 
 class Bob(Player):
-    attacks['punch'] = self.attack.punch(15, .25)
-    attacks['kick'] = self.attack.special(25, .185)
-    attacks['cool guy punch'] = self.attack.special(45, .1)
+    Player.attacks['punch'] = Attack(15, .25)
+    Player.attacks['kick'] = Attack(25, .185)
+    Player.attacks['cool guy punch'] = Attack(45, .1)
+
+class Sue(Player):
+    Player.attacks['punch'] = Attack(15, .25)
+    Player.attacks['kick'] = Attack(25, .185)
+    Player.attacks['cool guy punch'] = Attack(45, .1)
