@@ -19,6 +19,12 @@ Scenes:
     - 	0 		0
     -----------------
 
+
+Should a player just be a dictionary of attacks?
+List of player is also a dictionary
+Display moves is just keys from attacks
+
+
 * Attack
     - punch
     - kick

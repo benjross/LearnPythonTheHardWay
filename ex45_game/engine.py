@@ -1,16 +1,48 @@
+from attack import Attack
+from map import Map
+from random import choice
+from random import choice
 class Engine(object):
 
-   def __init__(self):
-        pass
+    players = {
+            'bob': {
+                'punch': Attack(15, .25),
+                'kick': Attack(25, .185),
+                'cool guy punch': Attack(45, .125)
+                },
+            'sue': {
+                'punch': Attack(15, .25),
+                'kick': Attack(25, .185),
+                'cool gal punch': Attack(45, .125)
+                }
+            }
 
-   def play(self):
-        pass
+    def __init__(self):
+        self.availPlayers = Engine.players.keys()        
 
-   def choose_player(self):
-	pass
+    def play(self):
+        print "Welcome to ASCII Kombat"
+        self.player = Engine.choose_player(self)
+        #print Engine.players.get(self.player)
+        #print Engine.players.get(self.opponent)
+        health = 100
+        oppHealth = 100
+        while health > 0 and oppHealth > 0:
+            attack = raw_input("attack> ")
+            oppHealth -= Engine.players.get(self.player).get(attack).attack()
+            health -= choice(Engine.players.get(self.opponent).values()).attack()
+            print health
+            print oppHealth
 
-   def generate_ai_attack(self, opp):
-	pass
+    def choose_player(self):
+        print "Choose a player"
+        for key in Engine.players.keys():
+            print key
+        player = raw_input("selection> ")
+        self.availPlayers.remove(player)
+        self.opponent = choice(self.availPlayers)
+        return player
+
 
 game = Engine()
 game.play()

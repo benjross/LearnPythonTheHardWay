@@ -1,12 +1,12 @@
 from random import random
 class Attack(object):
 
-    def __init__(self, prob, damage):
+    def __init__(self, damage, prob):
         self.prob = prob
-	self.damage = damage
-    
+        self.damage = damage
+
     def attack(self):
-	if random() < prob:
-	    return damage
-	else:
-	    return 0
+        if random() < self.prob:
+            return self.damage
+        else:
+            return 0
