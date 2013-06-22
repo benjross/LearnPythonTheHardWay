@@ -1,7 +1,7 @@
 from attack import Attack
-from map import Map
+from map import Map, Drawer
 from random import choice
-from random import choice
+
 class Engine(object):
 
     players = {
@@ -19,10 +19,13 @@ class Engine(object):
 
     def __init__(self):
         self.availPlayers = Engine.players.keys()        
+        self.map = Map(Engine.players)
+        self.drawer = Drawer(self.map)
 
     def play(self):
         print "Welcome to ASCII Kombat"
-        self.player = Engine.choose_player(self)
+        self.player = self.choose_player()
+        self.drawer.start_fight()
         #print Engine.players.get(self.player)
         #print Engine.players.get(self.opponent)
         health = 100
