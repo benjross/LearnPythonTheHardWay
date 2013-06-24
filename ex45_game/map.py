@@ -21,8 +21,10 @@ class Map(object):
         health2 = 'health %d / 100' % health2
         print health1 + self.draw_spaces(health1, health2) + health2
 
-    def print_screen(self, pos1, pos2):
-        print "\n" * 6
+    def print_screen(self, pos1, pos2, message):
+        print "\n" * 3
+        print " " * (40 - len(message)/2),
+        print "%s\n\n" % message
         self.print_body("_0_", pos1, pos2)
         self.print_body(" | ", pos1, pos2)
         self.print_body("/ \\", pos1, pos2)
@@ -48,12 +50,12 @@ class Map(object):
         print "-"*20 + " "*40 + "-"*20
 
 
-    def draw(self, health1, health2, pos1, pos2):
+    def draw(self, health1, health2, pos1, pos2, message):
         print self.name_bar
         self.print_health(health1, health2)
-        self.print_screen(pos1, pos2)
+        self.print_screen(pos1, pos2, message)
         print self.bottom_bar
-        map.draw_bottom()
+        self.draw_bottom()
         print "\n"
 
 class Drawer(object):
@@ -63,40 +65,46 @@ class Drawer(object):
 
     def start_fight(self):
         for i in range(35):
-            self.map.draw(100, 100, i, i)
+            self.map.draw(100, 100, i, i, "Begin Fight!")
             sleep(.1)
 
-    def player1_hit(self, health1, health2, damage):
+    def player1_hit(self, health1, health2, damage, move):
         for i in range(34, 40):
-            self.map.draw(health1, health2, i, 34)
+            self.map.draw(health1, health2, i, 34, move)
             sleep(.1)
 
         for i in range(40, 34, -1):
-            self.map.draw(health1, health2 - damage, i, 34)
+            self.map.draw(health1, health2 - damage, i, 34, "")
             sleep(.1)
 
-    def player2_hit(self, health1, health2, damage):
+    def player2_hit(self, health1, health2, damage, move):
         for i in range(34, 40):
-            self.map.draw(health1, health2, 34, i)
+            self.map.draw(health1, health2, 34, i, move)
             sleep(.1)
 
         for i in range(40, 34, -1):
-            self.map.draw(health1 - damage, health2, 34, i)
+            self.map.draw(health1 - damage, health2, 34, i, "")
             sleep(.1)
 
-players = {                                                                 
-        'bob': {                                                            
-            'punch': Attack(15, .25),                                       
-            'kick': Attack(25, .185),                                       
-            'cool guy punch': Attack(45, .125)                              
-            },                                                              
-        'sue': {                                                            
-            'punch': Attack(15, .25),                                       
-            'kick': Attack(25, .185),                                       
-            'cool gal punch': Attack(45, .125)                              
-            }                                                               
-        }
-map = Map(players)
+    def death_player1(self):
+        pass
+
+    def death_player2(self):
+        pass
+
+#players = {                                                                 
+#        'bob': {                                                            
+#            'punch': Attack(15, .25),                                       
+#            'kick': Attack(25, .185),                                       
+#            'cool guy punch': Attack(45, .125)                              
+#            },                                                              
+#        'sue': {                                                            
+#            'punch': Attack(15, .25),                                       
+#            'kick': Attack(25, .185),                                       
+#            'cool gal punch': Attack(45, .125)                              
+#            }                                                               
+#        }
+#map = Map(players)
 #for i in range(35):
 #    map.draw(100, 100, i, i)
 #    sleep(.1)
