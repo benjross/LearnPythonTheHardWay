@@ -3,11 +3,11 @@ from time import sleep
 from attack import Attack
 class Map(object):
 
-    def __init__(self, players):
+    def __init__(self, player1, player2, players):
         self.players = players
-        names = self.players.keys()
-        self.player2 = names.pop()
-        self.player1 = names.pop()
+        #names = self.players.keys()
+        self.player2 = player2
+        self.player1 = player1
         self.name_bar = self.player1
         self.name_bar += self.draw_spaces(self.player1, self.player2)
         self.name_bar += self.player2 
@@ -49,6 +49,19 @@ class Map(object):
         print "|" + " "*18 + "|" + " "*40 +"|" + " "*18 + "|"
         print "-"*20 + " "*40 + "-"*20
 
+    def print_death(self, message, spaces):
+        print "\n" * 3
+        print " " * (40 - len(message)/2),
+        if not spaces:
+            print "%s\n" % message
+        else:
+            print "%s" % message
+        print " " * 37 + "_0_"
+        print " " * 37 + " | "
+        print " " * 37 + "/ \\"
+        if spaces:
+            print ""
+        print " " * 37 + ">+o"
 
     def draw(self, health1, health2, pos1, pos2, message):
         print self.name_bar
@@ -56,6 +69,13 @@ class Map(object):
         self.print_screen(pos1, pos2, message)
         print self.bottom_bar
         self.draw_bottom()
+        print "\n"
+
+    def draw_death(self, health1, health2, message, spaces):
+        print self.name_bar
+        self.print_health(health1, health2)
+        self.print_death(message, spaces)
+        print self.bottom_bar
         print "\n"
 
 class Drawer(object):
@@ -86,11 +106,18 @@ class Drawer(object):
             self.map.draw(health1 - damage, health2, 34, i, "")
             sleep(.1)
 
-    def death_player1(self):
-        pass
+    def death_player1(self, health):
+        for i in range(10):
+            self.map.draw_death(0, health, "Player 2 wins!", i % 2)
+            sleep(.1)
+        self.map.draw_death(0, health, "Play Again?", 0)
 
-    def death_player2(self):
-        pass
+
+    def death_player2(self, health):
+        for i in range(10):
+            self.map.draw_death(health, 0,  "Player 1 wins!", i % 2)
+            sleep(.1)
+        self.map.draw_death(0, health, "Play Again?", 0)
 
 #players = {                                                                 
 #        'bob': {                                                            

@@ -29,15 +29,10 @@ Display moves is just keys from attacks
     - punch
     - kick
     - special_move
-* Player
-    - attack
-    * Bob
-    * Jill
-    * Sue
-    * Dave
 * Engine
     - play
     - select_player
     - generate_ai
 * Map
     - draw    
+    * drawer
