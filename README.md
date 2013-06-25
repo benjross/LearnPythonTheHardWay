@@ -11,3 +11,8 @@ Completed So Far
 Ex1 - Ex14
 
 Ex15 - Ex35
+
+
+TODO:
+Python cookbook
+Django v. Pyramid
