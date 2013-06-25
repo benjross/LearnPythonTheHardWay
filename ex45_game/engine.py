@@ -1,9 +1,13 @@
+'''Running this module starts the game.'''
+
 from attack import Attack
 from map import Map, Drawer
 from random import choice
 
 class Engine(object):
+    '''The engine that runs the game'''
 
+    # A player is a dictionary of attacks
     players = {
             'bob': {
                 'punch': Attack(10, 1),
@@ -23,6 +27,7 @@ class Engine(object):
             }
 
     def play(self):
+        '''Starts a game'''
         print "Welcome to ASCII Kombat"
         self.player = self.choose_player()
         map = Map(self.player, self.opponent, Engine.players)
@@ -63,6 +68,8 @@ class Engine(object):
             print "GAME OVER"
             
     def choose_player(self):
+        '''Helper method for play().  Lets the user choose a player and randomly
+        picks an opponent.'''
         print "Choose a player"
         for key in Engine.players.keys():
             print key
