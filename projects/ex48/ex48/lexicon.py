@@ -10,6 +10,8 @@ nouns = {'door', 'bear', 'princess', 'cabinet'}
 modifiers = {'cool', 'very', 'quickly'}
 
 def scan(phrase):
+    if phrase == None:
+        raise Exception("don't gimme None!")
     words = phrase.split()
     ret_words = []
     for word in words:
