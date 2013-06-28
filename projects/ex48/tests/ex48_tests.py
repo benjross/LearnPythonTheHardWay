@@ -7,6 +7,11 @@ def test_directions():
     assert_equal(result, [('direction', 'north'),
         ('direction', 'south'),
         ('direction', 'east')])
+    result = lexicon.scan("down left right back")
+    assert_equal(result, [('direction', 'down'),
+        ('direction', 'left'),
+        ('direction', 'right'),
+        ('direction', 'back')])
 
 def test_verbs():
     assert_equal(lexicon.scan("go"), [('verb', 'go')])
@@ -21,6 +26,7 @@ def test_stops():
     assert_equal(result, [('stop', 'the'),
         ('stop', 'in'),
         ('stop', 'of')])
+
 def test_nouns():
     assert_equal(lexicon.scan("bear"), [('noun', 'bear')])
     result = lexicon.scan("bear princess")
@@ -38,4 +44,21 @@ def test_errors():
     result = lexicon.scan("bear IAS princess")
     assert_equal(result, [('noun', 'bear'),
         ('error', 'IAS'),
+        ('noun', 'princess')])
+
+def test_modifiers():
+    assert_equal(lexicon.scan("quickly"), [('modifier', 'quickly')])
+    result = lexicon.scan("very cool")
+    assert_equal(result, [('modifier', 'very'),
+        ('modifier', 'cool')])
+
+def test_sentence():
+    result = lexicon.scan("eat up the cool bear very quickly princess")
+    assert_equal(result, [('verb', 'eat'),
+        ('direction', 'up'),
+        ('stop', 'the'),
+        ('modifier', 'cool'),
+        ('noun', 'bear'),
+        ('modifier', 'very'),
+        ('modifier', 'quickly'),
         ('noun', 'princess')])

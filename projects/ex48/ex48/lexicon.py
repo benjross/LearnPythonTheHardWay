@@ -7,6 +7,8 @@ stops = {'the', 'in', 'of', 'from', 'at', 'it'}
 
 nouns = {'door', 'bear', 'princess', 'cabinet'}
 
+modifiers = {'cool', 'very', 'quickly'}
+
 def scan(phrase):
     words = phrase.split()
     ret_words = []
@@ -20,6 +22,8 @@ def scan(phrase):
             ret_words.append(('stop', word))
         elif temp in nouns:
             ret_words.append(('noun', word))
+        elif temp in modifiers:
+            ret_words.append(('modifier', word))
         else:
             try:
                 num = int(word)
