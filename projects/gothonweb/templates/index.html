@@ -1,14 +1,11 @@
-$def with (greeting)
+$def with (greeting, datafile)
 
-<html>
-    <head>
-        <title>Gothons Of Planet Percal #25</title>
-    </head>
-    
-    <body>
-        $if greeting:
-            I just wanted to say <em style="color: green; font-size: 2em;">$greeting</em>
-        $else:
-            <em>Hello</em>, world!
-     </body>
-</html>
+$if greeting:
+    I just wanted to say <em style="color: green; font-size: 2em;">$greeting</em>
+$else:
+    <em>Hello</em>, world!
+<br>
+$if datafile:
+    <img src="static/$datafile" alt="your picture">
+<br>
+<a href="/hello">Go Back</a>
