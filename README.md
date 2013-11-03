@@ -8,11 +8,7 @@ http://learnpythonthehardway.org/
 
 Completed So Far
 ----------------
-Ex1 - Ex14
-
-Ex15 - Ex35
-
+Ex1 - Ex51
 
 TODO:
-Python cookbook
-Django v. Pyramid
+There is a weird bug in the Ex51 test suite.  I will come back to that. 
