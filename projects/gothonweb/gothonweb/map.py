@@ -6,7 +6,11 @@ class Room(object):
         self.paths = {}
 
     def go(self, direction):
-        return self.paths.get(direction, None)
+        result = self.paths.get(direction, None)
+        if not result:
+            return self.paths.get('*', None)
+        else:
+            return result
 
     def add_paths(self, paths):
         self.paths.update(paths)
@@ -88,14 +92,48 @@ the_end_loser = Room("The End",
 
 escape_pod.add_paths({'2': the_end_winner, '*': the_end_loser})
 
-generic_death = Room("death", "You died.")
+the_bridge_death = Room("death", 
+        """
+        In a panic you throw the bomb at the group of Gothons and make a leap
+        for the door. Right as you drop it a Gothon shoots you right in the back
+        killing you.  As you die you see another Gothon frantically try to
+        disarm the bomb.  You die knowing they will probably blow up when it
+        goes off.
+        """)
 
-the_bridge.add_paths({"throw the bomb": generic_death,
-    "slowly place the bomb": escape_pod})
+the_bridge.add_paths({"throw the bomb": the_bridge_death,
+    "slowly place the bomb": escape_pod, "*": the_bridge})
 
-laser_weapon_armory.add_paths({'0132': the_bridge, '*': generic_death})
+laser_weapon_armory_death = Room("death", 
+        """
+        The lock buzzes one last time and then you hear a sickeng melting sound
+        as the mechanism is fused together.  You decide to sit there, and
+        finally the Gothons blow up the ship from their ship and you die.
+        """)
 
-central_corridor.add_paths({"shoot!": generic_death, "dodge!": generic_death,
-    "tell a joke": laser_weapon_armory})
+laser_weapon_armory.add_paths({'0132': the_bridge, '*': laser_weapon_armory_death})
+
+central_corridor_shoot_death = Room("death", 
+        """
+        Quick on the draw you yank out your blaster and fite it as the Gothon.
+        His clown costume is flowing and moving around his body, which throws
+        off your aim.  Your laser hits his costume, but misses him entirely.
+        This completely ruins his brand new costume his mother bought him, which
+        makes him fly into an insane rage and blast you repeatedly in the face
+        until you are dead.  Then he eats you.
+        """)
+
+central_corridor_dodge_death = Room("death", 
+        """
+        Like a wold class boxer you dodge, weave, slip, and slide right as the
+        Gothon's blaster cranks a laser past your head.  In the middle of your
+        artful dodge your foot slips and you bang your head on the metal wall
+        and pass out.  You wake up shortly after only to die as the Gothon
+        stomps on your head and eats you.
+        """)
+
+central_corridor.add_paths({"shoot!": central_corridor_shoot_death, "dodge!":
+    central_corridor_dodge_death, "tell a joke": laser_weapon_armory, "*":
+    central_corridor})
 
 START = central_corridor

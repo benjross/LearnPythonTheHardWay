@@ -31,8 +31,23 @@ def test_map():
     assert_equal(start.go('down').go('up'), start)
 
 def test_gothon_map():
-    assert_equal(START.go('shoot!'), generic_death)
-    assert_equal(START.go('dodge!'), generic_death)
+    assert_equal(START.go('shoot!'), central_corridor_shoot_death)
+    assert_equal(START.go('dodge!'), central_corridor_dodge_death)
+    assert_equal(START.go('made up input'), central_corridor)
 
     room = START.go('tell a joke')
     assert_equal(room, laser_weapon_armory)
+    
+    assert_equal(room.go('made up input'), laser_weapon_armory_death)
+
+    room = room.go('0132')
+    assert_equal(room, the_bridge)
+
+    assert_equal(room.go("throw the bomb"), the_bridge_death)
+    assert_equal(room.go("made up input"), the_bridge)
+
+    room = room.go("slowly place the bomb")
+    assert_equal(room, escape_pod)
+
+    assert_equal(room.go('wrong answer'), the_end_loser)
+    assert_equal(room.go('2'), the_end_winner)
