@@ -1,38 +1,45 @@
 import web
+from gothonweb import map
 
 urls = (
-        '/hello', 'index'
+        '/game', 'GameEngine', '/', 'index',
         )
 
 app = web.application(urls, globals())
+
+# little hack so that debug mode works with sessions
+if web.config.get('_session') is None:
+    store = web.session.DiskStore('sessions')
+    session = web.session.Session(app, store, initializer={'room': None})
+    web.config._session = session
+else:
+    session = web.config._session
 
 render = web.template.render('templates/', base="layout")
 
 class index:
     def GET(self):
-        return render.hello_form()
+        # this is uses to "setup" the session with starting values
+        session.room = map.START
+        web.seeother("/game")
+
+class GameEngine(object):
+
+    def GET(self):
+        if session.room:
+            return render.show_room(room=session.room)
+        else:
+            # why is there here? do you need it?
+            return render.you_died()
 
     def POST(self):
-        form = web.input(greet="Hello", name="Nobody", datafile={})
-        # check for empty strings
-        if not form.greet:
-            form.greet = "Hello"
-        if not form.name:
-            form.name = "Nobody"
-        greeting = "%s, %s" % (form.greet, form.name)
-        filename = form.datafile.filename
-        if filename:
-            # replace spaces
-            filename = filename.replace(' ', '_')
-            # escape hashes (otherwise it gets interpretted as python comment)
-            filename = filename.replace('#', 'hash')
-            # splits the and chooses the last part (the filename with extension)
-            filename = filename.split('/')[-1]
-            # creates the file where the uploaded file should be stored
-            with open('static/'+ filename,'w') as fout:
-                # writes the uploaded file to the newly created file.
-                fout.write(form.datafile.file.read())
-        return render.index(greeting, filename)
+        form = web.input(greet="Hello", name="Nobody")
+
+        # there is a bug here, can you fix it?
+        if session.room and form.action:
+            session.room = session.room.go(form.action)
+
+        web.seeother("/game")
 
 if __name__ == "__main__":
     app.run()
